@@ -88,6 +88,7 @@ def get_cogen_saving(cogen_functioning_regime, requested_electric_power, request
 
     print(f"BALANCE: {total_savings+total_revenues-total_costs} \n")
 
+
 # If this program was run (instead of imported), run the script:
 if __name__ == "__main__":
     import sys
