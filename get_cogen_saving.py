@@ -1,11 +1,13 @@
 import numpy as np
 import collections
 
-def get_cogen_saving(cogen_functioning_regime, requested_electric_power, requested_thermal_power):
+def get_cogen_saving(cogen_functioning_regime, requested_electric_power, requested_thermal_power, optional_args = []):
     """Get the saving in % using the cogenerator giving the
     - cogen_functioning_regime float number from 0 to 1
     - requested_electric_power int number from 1 to 1.000 in kW 
     - requested_thermal_power int number from 1 to 1.000 in kW
+    [optional args list]
+    "-ekc" (Effective KWh Cost) if specified, ch4 cost is calculated with this constant insted of with classic water heater efficiency
     
     example: get_cogen_saving(0.7, 294, 350)
     returns 0.50 that means 50% of saving using the cogenerator instead of not using it """
@@ -57,8 +59,13 @@ def get_cogen_saving(cogen_functioning_regime, requested_electric_power, request
         
     costs = collections.defaultdict(dict)
     revenues = collections.defaultdict(dict)
-
-    costs["no cogen"]["ch4"] = requested_thermal_power * EFFECTIVE_KWH_COST
+    
+    #checks how to calculate ch4 cost
+    if "-ekc" in optional_args:
+        costs["no cogen"]["ch4"] = requested_thermal_power * EFFECTIVE_KWH_COST
+    else:
+        costs["no cogen"]["ch4"] = requested_thermal_power / (CLASSIC_WATER_HEATER_EFFICIENCY * HOT_WATER_DISTRIBUTION_EFFICIENCY) / HEATING_CH4_POWER * CH4_PRICE
+    
     costs["no cogen"]["electric energy"] = requested_electric_power * ELECTRIC_ENERGY_PRICE
     costs["no cogen"]["classic water heater electric energy"] = classic_water_heater_electric_power * ELECTRIC_ENERGY_PRICE
 
@@ -95,4 +102,5 @@ def get_cogen_saving(cogen_functioning_regime, requested_electric_power, request
 # If this program was run (instead of imported), run the script:
 if __name__ == "__main__":
     import sys
-    get_cogen_saving(float(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+    optional_args = sys.argv[4:]
+    get_cogen_saving(float(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), optional_args)
