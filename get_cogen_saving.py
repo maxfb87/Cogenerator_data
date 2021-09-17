@@ -2,15 +2,19 @@ import numpy as np
 import collections
 
 def get_cogen_saving(cogen_functioning_regime, requested_electric_power, requested_thermal_power, optional_args = []):
-    """Get the saving in % using the cogenerator giving the
-    - cogen_functioning_regime float number from 0 to 1
-    - requested_electric_power int number from 1 to 1.000 in kW 
-    - requested_thermal_power int number from 1 to 1.000 in kW
-    [optional args list]
-    "-ekc" (Effective KWh Cost) if specified, ch4 cost is calculated with this constant insted of with classic water heater efficiency
+    """Get the saving in % using the cogenerator giving following inputs (the order must be respected):
+    - cogen_functioning_regime: float number from 0 to 1
+    - requested_electric_power: int number from 1 to 1.000 in kW 
+    - requested_thermal_power: int number from 1 to 1.000 in kW
+    - [optional args list]
+        "-ekc" (Effective KWh Cost) if specified, ch4 cost is calculated with this constant insted of with classic water heater efficiency
     
-    example: get_cogen_saving(0.7, 294, 350)
-    returns 0.50 that means 50% of saving using the cogenerator instead of not using it """
+    example1: get_cogen_saving(0.7, 294, 350)
+    returns 0.50 that means 50% of cost saving using the cogenerator instead of not using it 
+
+    example2: get_cogen_saving(0.7, 294, 350, [-ekc])
+    returns 0.55 that means 55% of cost saving using the cogenerator instead of not using it,
+    calculated with the Effective KWh Ccost constant"""
 
     if cogen_functioning_regime <= 0 or cogen_functioning_regime > 1:
         raise ValueError("Cogeneratore regime value must be between 0 and 1")
@@ -92,15 +96,23 @@ def get_cogen_saving(cogen_functioning_regime, requested_electric_power, request
     no_cogen_total_costs = sum(costs["no cogen"].values())
     cogen_total_costs = sum(costs["cogen"].values())
     cogen_total_revenues = sum(revenues["cogen"].values())
+    
+    total_no_cogen_balance = no_cogen_total_costs
+    total_cogen_balance = cogen_total_costs - cogen_total_revenues
 
-    print(f"TOTAL NO COGEN COSTS: {no_cogen_total_costs} €")
-    print(f"++ TOTAL COGEN COSTS: {cogen_total_costs} €")
-    print(f"TOTAL COGEN REVENUE: {cogen_total_revenues} €")
-    print(f"++ TOTAL COGEN COSTS-REVENUES: {cogen_total_costs - cogen_total_revenues} €")
+    saving = 1 - (total_cogen_balance / total_no_cogen_balance)
+
+    # print(f"TOTAL NO COGEN COSTS: {no_cogen_total_costs} €")
+    # print(f"++ TOTAL COGEN COSTS: {cogen_total_costs} €")
+    # print(f"++ TOTAL COGEN REVENUE: {cogen_total_revenues} €")
+    # print(f"++ TOTAL COGEN COSTS-REVENUES: {cogen_total_costs - cogen_total_revenues} €")
     print(f"BALANCE:  {no_cogen_total_costs+cogen_total_revenues-cogen_total_costs}")
+
+    return saving
 
 # If this program was run (instead of imported), run the script:
 if __name__ == "__main__":
     import sys
     optional_args = sys.argv[4:]
-    get_cogen_saving(float(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), optional_args)
+    saving = get_cogen_saving(float(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), optional_args)
+    print(f"SAVING: {str(saving)}")
