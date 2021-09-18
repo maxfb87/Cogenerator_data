@@ -106,7 +106,8 @@ def get_cogen_saving(cogen_functioning_regime, requested_electric_power, request
     # print(f"++ TOTAL COGEN COSTS: {cogen_total_costs} €")
     # print(f"++ TOTAL COGEN REVENUE: {cogen_total_revenues} €")
     # print(f"++ TOTAL COGEN COSTS-REVENUES: {cogen_total_costs - cogen_total_revenues} €")
-    print(f"BALANCE:  {no_cogen_total_costs+cogen_total_revenues-cogen_total_costs}")
+    
+    #print(f"BALANCE:  {no_cogen_total_costs+cogen_total_revenues-cogen_total_costs}")
 
     return saving
 
