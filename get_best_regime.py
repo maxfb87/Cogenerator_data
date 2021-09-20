@@ -24,6 +24,7 @@ def get_best_regime(requested_electric_power, requested_thermal_power):
 
     for regime in regimes:
         saving = get_cogen_saving(regime, requested_electric_power, requested_thermal_power)
+        #print(f"REGIME:  {regime}  SAVING: {saving}")
         if saving > best_saving:
             best_regime = regime
             best_saving = saving
