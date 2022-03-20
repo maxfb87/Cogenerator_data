@@ -14,14 +14,14 @@ def get_start_end_date(year, month):
     """
 
     try:
-        datetime.datetime(int(year), 10, 30)
+        datetime.datetime(int(year), 10, 28)
     except ValueError:
         raise("Year variable has something wrong. Please check it")
 
     try:
         if (int(month) < 10) and (int(month[0]) != 0):
             month = "0" + month
-        datetime.datetime(2000, int(month), 30)
+        datetime.datetime(2000, int(month), 28)
     except ValueError:
         raise("Month variable has something wrong. Please check it")
 
@@ -29,4 +29,3 @@ def get_start_end_date(year, month):
     end_date = year + "-" + month + "-" + str(calendar.monthrange(int(year),int(month))[1])
 
     return start_date, end_date
-
