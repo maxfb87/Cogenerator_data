@@ -20,7 +20,6 @@ def get_start_end_date(year, month):
 
     try:
         if (int(month) < 10):
-            print(int(month))
             month = "0" + str(int(month))
         datetime.datetime(2000, int(month), 28)
     except ValueError:
