@@ -19,8 +19,9 @@ def get_start_end_date(year, month):
         raise("Year variable has something wrong. Please check it")
 
     try:
-        if (int(month) < 10) and (int(month[0]) != 0):
-            month = "0" + month
+        if (int(month) < 10):
+            print(int(month))
+            month = "0" + str(int(month))
         datetime.datetime(2000, int(month), 28)
     except ValueError:
         raise("Month variable has something wrong. Please check it")
